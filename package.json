@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "build": "cp public/index.html public/script.js public/style.css . && cp -r public/images .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
