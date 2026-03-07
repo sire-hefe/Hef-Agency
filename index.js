@@ -1,21 +1,26 @@
+require("dotenv").config()
+const express = require("express")
 const nodemailer = require("nodemailer")
+const path = require("path")
 
-module.exports = async (req, res) => {
-  if (req.method !== "POST") {
-    return res.status(405).json({ success: false, error: "Method not allowed" })
-  }
+const app = express()
 
-  const GMAIL_USER = process.env.GMAIL_USER
-  const GMAIL_PASS = process.env.GMAIL_APP_PASSWORD || process.env.GMAIL_PASS
+app.use(express.json())
+app.use(express.static(path.join(__dirname, "public")))
 
+const GMAIL_USER = process.env.GMAIL_USER
+const GMAIL_PASS = process.env.GMAIL_APP_PASSWORD || process.env.GMAIL_PASS
+
+app.post("/api/send", async (req, res) => {
   try {
-    const { name, email, phone, message } = req.body || {}
+    const { name, email, phone, message } = req.body
 
     if (!name || !email || !phone) {
       return res.status(400).json({ success: false, error: "Name, email, and phone are required" })
     }
 
     if (!GMAIL_USER || !GMAIL_PASS) {
+      console.error("Gmail credentials not configured.")
       return res.status(500).json({ success: false, error: "Email service not configured" })
     }
 
@@ -42,7 +47,7 @@ ${message || "(no message)"}
 `
     })
 
-    res.status(200).json({ success: true, message: "Email sent" })
+    res.json({ success: true, message: "Email sent" })
   } catch (err) {
     console.error("Email error:", err)
     res.status(500).json({
@@ -50,4 +55,14 @@ ${message || "(no message)"}
       error: err.message || "Failed to send email"
     })
   }
+})
+
+// For local dev: run with `node server.js`
+// For Vercel: exports the app as a serverless function
+if (require.main === module) {
+  app.listen(3000, () => {
+    console.log("Server running on http://localhost:3000")
+  })
 }
+
+module.exports = app
