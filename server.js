@@ -6,7 +6,8 @@ const path = require("path")
 const app = express()
 
 app.use(express.json())
-app.use(express.static("public"))
+app.use(express.static("public"))   // local dev: serves from public/
+app.use(express.static("."))        // fallback: serves from root (mirrors Vercel)
 
 const GMAIL_USER = process.env.GMAIL_USER
 const GMAIL_PASS = process.env.GMAIL_APP_PASSWORD || process.env.GMAIL_PASS
