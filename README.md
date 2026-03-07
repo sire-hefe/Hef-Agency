@@ -33,8 +33,8 @@
 
 4. Configure the project:
    - **Framework Preset**: Other
-   - **Build Command**: leave blank
-   - **Output Directory**: leave blank (vercel.json handles routing)
+   - **Build Command**: `npm run build` (or leave blank – vercel.json sets it)
+   - **Output Directory**: `.` (root)
    - **Install Command**: `npm install`
 
 5. Add environment variables (Settings → Environment Variables):

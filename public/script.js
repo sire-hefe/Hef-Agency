@@ -23,7 +23,13 @@ form.addEventListener("submit", async (e) => {
       })
     })
 
-    const result = await response.json()
+    const text = await response.text()
+    let result
+    try {
+      result = JSON.parse(text)
+    } catch {
+      throw new Error("Server returned an invalid response")
+    }
 
     if (result.success) {
       alert("Application sent successfully!")
